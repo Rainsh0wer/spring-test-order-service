@@ -30,18 +30,16 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, Ca
     @Override
     public String createOrder(List<OrderItem> items) {
         Order order = Order.create(items);
-        order = orderRepositoryPort.save(order); // Saved as PENDING
+        order = orderRepositoryPort.save(order);
 
         try {
             inventoryServicePort.reserveStock(items);
         } catch (Exception e) {
-            // If  fails 
             order.cancel();
             orderRepositoryPort.save(order);
             throw new OrderDomainException("Failed to reserve stock. Order cancelled. Reason: " + e.getMessage());
         }
 
-        // If reserve succeeds
         confirmOrder(order.getOrderId());
         return order.getOrderId();
     }
@@ -53,8 +51,6 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, Ca
 
         order.confirm();
         orderRepositoryPort.save(order);
-        
-        // Publish event after confirm
         orderEventPublisherPort.publishOrderCreatedEvent(orderId);
     }
 
@@ -65,8 +61,6 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, Ca
 
         order.cancel();
         orderRepositoryPort.save(order);
-
-        // Release stock
         inventoryServicePort.releaseStock(order.getItems());
     }
 

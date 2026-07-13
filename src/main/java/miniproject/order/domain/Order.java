@@ -18,7 +18,6 @@ public class Order {
         this.items = new ArrayList<>(items);
     }
 
-    // Factory method to create new order
     public static Order create(List<OrderItem> items) {
         if (items == null || items.isEmpty()) {
             throw new OrderDomainException("Order must have at least one item");
