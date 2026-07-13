@@ -3,6 +3,7 @@ package miniproject.order.application.service;
 import miniproject.order.application.CancelOrderUseCase;
 import miniproject.order.application.ConfirmOrderUseCase;
 import miniproject.order.application.CreateOrderUseCase;
+import miniproject.order.application.GetOrdersUseCase;
 import miniproject.order.application.port.out.InventoryServicePort;
 import miniproject.order.application.port.out.OrderEventPublisherPort;
 import miniproject.order.application.port.out.OrderRepositoryPort;
@@ -12,7 +13,7 @@ import miniproject.order.domain.exception.OrderDomainException;
 
 import java.util.List;
 
-public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, CancelOrderUseCase {
+public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, CancelOrderUseCase, GetOrdersUseCase {
 
     private final OrderRepositoryPort orderRepositoryPort;
     private final InventoryServicePort inventoryServicePort;
@@ -67,5 +68,10 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, Ca
 
         // Release stock
         inventoryServicePort.releaseStock(order.getItems());
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        return orderRepositoryPort.findAll();
     }
 }

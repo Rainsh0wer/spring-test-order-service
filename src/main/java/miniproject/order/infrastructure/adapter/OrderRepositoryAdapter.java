@@ -6,7 +6,9 @@ import miniproject.order.infrastructure.entity.OrderJpaEntity;
 import miniproject.order.infrastructure.repository.OrderJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class OrderRepositoryAdapter implements OrderRepositoryPort {
@@ -28,5 +30,12 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     public Optional<Order> findById(String orderId) {
         return orderJpaRepository.findById(orderId)
                 .map(OrderJpaEntity::toDomain);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return orderJpaRepository.findAll().stream()
+                .map(OrderJpaEntity::toDomain)
+                .collect(Collectors.toList());
     }
 }

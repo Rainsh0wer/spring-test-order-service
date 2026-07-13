@@ -25,9 +25,6 @@ public class InventoryServiceAdapter implements InventoryServicePort {
                 StockRequestDto request = new StockRequestDto(item.getProductId(), item.getQuantity());
                 feignClient.reserveStock(request);
             } catch (Exception e) {
-                // Here we catch FeignException or RetryableException (timeout)
-                // In a real system, we'd need to release already reserved items for this order.
-                // For simplicity, we throw so OrderService can mark Order as CANCELLED.
                 throw new OrderDomainException("Failed to reserve stock for productId: " + item.getProductId() + ". Reason: " + e.getMessage());
             }
         }
@@ -40,7 +37,6 @@ public class InventoryServiceAdapter implements InventoryServicePort {
                 StockRequestDto request = new StockRequestDto(item.getProductId(), item.getQuantity());
                 feignClient.releaseStock(request);
             } catch (Exception e) {
-                // Log and maybe retry later. For now, wrap in RuntimeException.
                 throw new OrderDomainException("Failed to release stock for productId: " + item.getProductId() + ". Reason: " + e.getMessage());
             }
         }
