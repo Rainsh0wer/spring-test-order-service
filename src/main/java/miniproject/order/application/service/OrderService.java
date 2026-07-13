@@ -35,13 +35,13 @@ public class OrderService implements CreateOrderUseCase, ConfirmOrderUseCase, Ca
         try {
             inventoryServicePort.reserveStock(items);
         } catch (Exception e) {
-            // If reserve fails (timeout, out of stock, down), mark order as CANCELLED
+            // If  fails 
             order.cancel();
             orderRepositoryPort.save(order);
             throw new OrderDomainException("Failed to reserve stock. Order cancelled. Reason: " + e.getMessage());
         }
 
-        // If reserve succeeds, confirm the order
+        // If reserve succeeds
         confirmOrder(order.getOrderId());
         return order.getOrderId();
     }
