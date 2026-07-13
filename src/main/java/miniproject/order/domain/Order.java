@@ -5,12 +5,13 @@ import miniproject.order.domain.exception.OrderDomainException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Order {
-    private String orderId;
+    private final String orderId;
     private OrderStatus status;
-    private List<OrderItem> items;
+    private final List<OrderItem> items;
 
     public Order(String orderId, OrderStatus status, List<OrderItem> items) {
         this.orderId = orderId;
@@ -49,5 +50,22 @@ public class Order {
 
     public List<OrderItem> getItems() {
         return Collections.unmodifiableList(items);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Order order = (Order) o;
+        return Objects.equals(orderId, order.orderId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId);
     }
 }

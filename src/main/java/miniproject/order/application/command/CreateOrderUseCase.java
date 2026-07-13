@@ -1,4 +1,4 @@
-package miniproject.order.application;
+package miniproject.order.application.command;
 
 import miniproject.order.domain.OrderItem;
 

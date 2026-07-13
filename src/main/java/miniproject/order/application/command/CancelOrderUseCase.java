@@ -1,4 +1,4 @@
-package miniproject.order.application;
+package miniproject.order.application.command;
 
 public interface CancelOrderUseCase {
     void cancelOrder(String orderId);
